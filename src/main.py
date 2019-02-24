@@ -1,8 +1,12 @@
 """This module runs as a pseudo main function and data set into a dataframe"""
 
-def Load_Data():
-    pass
+def load_data():
+    """load_data takes no arugments (currently) and loads in the dataset identified in this project.
+    it then calls TODO"""
+    print("load data here")
+
 
 
 if __name__ == 'main':
-    Load_data()
+    #Psuedo main function. This construct is the entry point for the tool.
+    load_data()
