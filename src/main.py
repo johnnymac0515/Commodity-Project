@@ -9,4 +9,5 @@ def load_data():
 
 if __name__ == 'main':
     #Psuedo main function. This construct is the entry point for the tool.
+    print('main ran')
     load_data()
