@@ -1,17 +1,17 @@
 """Setup"""
 from setuptools import setup, find_packages
 
+with open('README.md') as f:
+    readme = f.read()
+
 with open('LICENSE') as f:
     license = f.read()
 
-with open('README') as f:
-    readme = f.read()
-
-with open('requirements.text') as f:
+with open('requirements.txt') as f:
     requires = list(f.read().splitlines())
 
-setup(name='Comm Tool',
-      version='0.1',
+setup(name='commodity_tool',
+      version='0.6dev',
       long_description=readme,
       classifiers=['Development Status :: 4 - Beta',
                    'Environment :: MacOS X',
@@ -25,7 +25,12 @@ setup(name='Comm Tool',
        author_email= 'john.macnamara.dev@gmail.com',
        license=license,
        packages=find_packages(),
+       package_data={'': ['LICENSE']},
        install_requires=requires,
-       include_package_data=True,
-                   )
+       include_package_data=True
+    #    entry_points= {
+    #        'console_scripts': ['commodity_tool=commodity_project_ir.command_line:main']
+    #                 }
+       
+        )
        

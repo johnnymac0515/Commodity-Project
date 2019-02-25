@@ -6,6 +6,10 @@ def load_data():
     print("load data here")
 
 
+def main():
+    """Runs if this module is imported"""
+    print("Other main ran")
+    load_data()
 
 if __name__ == 'main':
     #Psuedo main function. This construct is the entry point for the tool.
