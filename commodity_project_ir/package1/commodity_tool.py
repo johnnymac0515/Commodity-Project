@@ -1,5 +1,5 @@
 """This module runs as a pseudo main function and data set into a dataframe"""
-
+import commodity_project_ir
 def load_data():
     """load_data takes no arugments (currently) and loads in the dataset identified in this project.
     it then calls TODO"""
