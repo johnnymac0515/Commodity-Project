@@ -26,7 +26,7 @@ def load_data(path):
 
 def main():
     """Psuedo main function."""
-    # TODO replace below with argparser
+    # TODO replace below with argparser at some point
         
     au_path = input("Enter the local file path for the Allen/Unger 'All Commodities' dataset\nPath: ")
     
