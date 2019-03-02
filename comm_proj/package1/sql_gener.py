@@ -39,9 +39,11 @@ def table_create_str(arg_list, name):
     """Returns a sqlite3 create_table string argument from the name of the table and 
        map_dftype_to_sqldtype(map) argument list"""
 
-    #    TODO
+    arg_list_str = reduce((lambda a, b: a + ', ' + b ) , arg_list)
 
-    return None
+    sql_table_str = """CREATE TABLE IF NOT EXISTS {table_name} ( id {arg_str});""".format(table_name=name, arg_str=arg_list_str)
+
+    return sql_table_str
 
 
 class sql_database(object):
@@ -50,17 +52,14 @@ class sql_database(object):
        self.df = df
     
     def __repr__(self):
-        self.name = "SQL database class object for {dfname} dataframe".format(dfname= df.name)
+        self.name = "SQL database class object for {dfname} dataframe".format(dfname= self.df.name)
 
     def create_db(self):
-        conn = sqlite3.connect("{name}.db".format(name=df.name))
+        self.conn = sqlite3.connect("{name}.db".format(name=self.df.name))
 
-        curs = conn.cursor()
+        self.curs = self.conn.cursor()
 
     def create_table(self):
-        create_table_state = "CREATE TABLE IF NOT EXISTS au_sql_table {df_column_tuble}" 
+        self.create_table_state = "CREATE TABLE IF NOT EXISTS au_sql_table {df_column_tuble}".format(df_column_tuble=None) #TODO 
 
 
-import pandas as pd
-df = pd.read_csv('/Users/johnmacnamara/Desktop/test_data2.csv')
-map_dftype_to_sqldtype(df)
