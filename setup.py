@@ -29,7 +29,7 @@ setup(name='commodity_tool',
        install_requires=requires,
        include_package_data=True
     #    entry_points= {
-    #        'console_scripts': ['commodity_tool=commodity_project_ir.command_line:main']
+    #        'console_scripts': ['commodity_tool=commodity_project_ir.command_line:main'] TODO add entry point
     #                 }
        
         )
