@@ -140,7 +140,8 @@ class SqlDatabase():
     def select_data(self, select='*', **kwargs):
         """Member function generates a SQL SELECT statement string and executes the Query"""
         select_str = sql_select_str(self.table_name, select=select, where=kwargs)
-        selected_data = self.curs.execute(select_str)
+        self.curs.execute(select_str)
+        selected_data = self.curs.fetchall()
         return selected_data
 
     def delete_database(self):
@@ -159,15 +160,3 @@ class SqlDatabase():
         #Displays database name, table and names, contents of created tables (header/fetchone) and
         # other databse/table attributes
 
-
-# import pandas as pd
-# dataframe = pd.read_csv('/Users/johnmacnamara/Desktop/test_data2.csv', index_col=0)
-# database = SqlDatabase(dataframe, 'test_database')
-# database.create_db()
-# database.create_curs()
-# database.create_table()
-# database.insert_data()
-# data = database.select_data(select='*', Location='Amsterdam')
-# database.select_data(Location='Aix')
-# data = database.display(size=6)
-# database.delete_database()

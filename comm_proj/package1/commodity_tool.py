@@ -3,26 +3,60 @@
 
 import sys
 import pandas as pd 
+import comm_proj.package1.sql_gener as sql_gener
+import comm_proj.package1.load_and_clean as load_and_clean
+import comm_proj.package1.plotter as plotter
 
-def load_data(path):
-    """load_data takes path and loads in the dataset identified in this project into a pandas df.
-     It then prints high level information about the dataframe for the users reference and returns
-     this dataframe"""
+def build_database(dataframe, name):
+    """Builds SQLite3 database for querying commodity data and returns database object"""
+    database = sql_gener.SqlDatabase(dataframe, name)
+    database.create_db()
+    database.create_curs()
+    database.create_table()
+    database.insert_data()
+    
+    return database
 
-    columns = ['Item Year', 'Original Value', 'Standard Value', 'Original Currency',
-               'Standard Currency', 'Orignal Measure', 'Standard Measure', 'Location',
-               'Commodity']
-    col_type = [int, float, float, object, object, object, object, object]
+def query_data(database, location, commodity):
 
-    col_type_dict = dict(zip(columns, col_type))
+    data = database.select_data(select='*', Location=location, Commodity=commodity)
+    return data
 
-    au_df = pd.read_csv(path, usecols=columns)
-    au_df = au_df.astype(col_type_dict)
-    au_df.name = 'AU_data'
-    au_df_trunc = au_df.iloc[1:50]
-    au_df_trunc.to_csv('/Users/johnmacnamara/Desktop/test_data2.csv')
-    return au_df
+def select_data(df):
 
+    while True:
+    
+        print("Select a location (Country/Region) from the below list\n")
+        location_list = list(df["Location"].unique())
+        [print(loc) for loc in location_list]
+        location = input("\nLocation: ")
+
+        if location in location_list:
+            break
+        elif not location:
+            return 0, 0
+        else:
+            print("Couldn't find location. Try again\n")
+            continue
+  
+
+
+    while True:
+
+        print("Select a Commodity from the below list found in {}\n".format(location))
+        commodity_list = list(df[df['Location']==location]["Commodity"].unique())
+        [print(com) for com in commodity_list]
+        commodity = input("\nCommodity: ")
+
+        if commodity in commodity_list:
+            break
+        elif not commodity:
+            return 0, 0
+        else:
+            print("Couldn't find location. Try again\n")
+            continue
+
+    return location, commodity
 
 def main():
     """Psuedo main function."""
@@ -44,10 +78,27 @@ def main():
             raise AttributeError
 
     except AttributeError:
-        print('Incorrect File type. File must be .csv')
+        print('Incorrect File type. File must be .csv. Try again')
+        main()
 
-    load_data(au_path)
-
+    dataframe, column_names = load_and_clean.load_data(au_path)
+    database = build_database(dataframe, 'commodity_database')
+    
+    
+    while True:
+        
+        location, commodity = select_data(dataframe)
+        
+        if not location or not commodity:
+            print('Goodbye')
+            database.delete_database()
+            sys.exit()
+        
+        data = query_data(database, location, commodity)
+        new_dataframe = pd.DataFrame(data, columns=column_names)
+        plotter.plotter(new_dataframe, location, commodity)
+        
 if __name__ == '__main__':
     # This construct is the entry point for the tool.
-    sys.exit(main())
+    # sys.exit(main()) TODO uncomment for release. debug only
+    main()
