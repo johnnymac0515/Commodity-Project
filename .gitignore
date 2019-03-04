@@ -25,6 +25,8 @@ share/python-wheels/
 MANIFEST
 
 .coverage
+.pylintrc
+.vscode/
 
 *.manifest
 *.spec
