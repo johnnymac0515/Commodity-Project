@@ -3,13 +3,14 @@
 
 import sqlite3
 from functools import reduce
+import os
 
 def map_dftype_to_sqldtype(d_f):
     """Takes (at a minimum 1 row of) DataFrame object and combines the Column Name and dtype of the
     DF that and maps them to useable column parameters and SQL types (supported by sqlite), Also
     returns """
 
-    data_type_map = {'i':'INTEGER', 'f':'REAL', 'None':'NULL', 'O':'TEXT'}
+    data_type_map = {'i':'INTEGER', 'f':'REAL', 'O':'TEXT'}
 
     df_cols = list(d_f.columns)
 
@@ -51,7 +52,7 @@ def dataframe_to_tup_list(d_f):
     """Returns a list of tuples containg dataframe row-wise data"""
     return [tuple(row) for row in d_f.values]
 
-def sql_select_str(tablename, select='*', *, where=None):
+def sql_select_str(tablename, *, select='*', where=None):
     """Creates a simple 'SELECT {columns} FROM {table} SQL statement. Also can add WHERE
        table_column = stuff"""
 
@@ -60,7 +61,7 @@ def sql_select_str(tablename, select='*', *, where=None):
     else:
         sel_str = select
 
-        select_statement = "SELECT {stuff} FROM {table}".format(stuff=sel_str, table=tablename)
+    select_statement = "SELECT {stuff} FROM {table}".format(stuff=sel_str, table=tablename)
 
     if where is not None:
         where_str = " WHERE "
@@ -77,6 +78,7 @@ class SqlDatabase():
     dataframe data"""
 
     def __init__(self, d_f, name):
+
         if d_f is None:
             raise TypeError("__init__ missing 1 required positonal argument 'df'")
         elif name is None:
@@ -89,6 +91,7 @@ class SqlDatabase():
             self.conn = None
             self.curs = None
             self.table_cols = None
+            self.db_filename = None
 
     def __repr__(self):
         self.db_name = "SQL database class object for {dfname} dataframe".format(
@@ -97,7 +100,8 @@ class SqlDatabase():
 
     def create_db(self):
         """Member function that creates a database from passed DataFrame if no database exists"""
-        self.conn = sqlite3.connect("{}.db".format(str(self.df_name)))
+        self.db_filename = "{}.db".format(str(self.df_name))
+        self.conn = sqlite3.connect(self.db_filename)
         print('Creating Database {}.db....'.format(self.df_name))
         return self.conn
 
@@ -135,9 +139,19 @@ class SqlDatabase():
 
     def select_data(self, select='*', **kwargs):
         """Member function generates a SQL SELECT statement string and executes the Query"""
-        select_str = sql_select_str(self.table_name, select, where=kwargs)
+        select_str = sql_select_str(self.table_name, select=select, where=kwargs)
         selected_data = self.curs.execute(select_str)
         return selected_data
+
+    def delete_database(self):
+        """Member function deletes sqlite databse stored in local memory, found in working
+        directory"""
+        fname = self.db_filename
+        if os.path.isfile(fname):
+            os.remove(fname)
+        else:
+            raise FileExistsError("No databse file found in working directory")
+
 
     def display(self, *, size=1):
         """Stupid display function. NEEDS IMPROVEMENT"""
@@ -148,17 +162,14 @@ class SqlDatabase():
         # other databse/table attributes
 
 
-#import pandas as pd
-# dataframe = pd.read_csv('/Users/johnmacnamara/Desktop/test_data3.csv', index_col=0)
-# print(dataframe_to_tup_list(dataframe)[:2])
+# import pandas as pd
+# dataframe = pd.read_csv('/Users/johnmacnamara/Desktop/test_data2.csv', index_col=0)
 # database = SqlDatabase(dataframe, 'test_database')
-# print(database.__repr__())
 # database.create_db()
 # database.create_curs()
 # database.create_table()
 # database.insert_data()
 # data = database.select_data(select='*', Location='Amsterdam')
-# print(data.fetchmany(size=2))
 # database.select_data(Location='Aix')
 # data = database.display(size=6)
-# print(data)
+# database.delete_database()
