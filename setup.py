@@ -11,7 +11,7 @@ with open('requirements.txt') as f:
     requires = list(f.read().splitlines())
 
 setup(name='commodity_tool',
-      version='0.6dev',
+      version='1.0ev',
       long_description=readme,
       classifiers=['Development Status :: 4 - Beta',
                    'Environment :: MacOS X',
