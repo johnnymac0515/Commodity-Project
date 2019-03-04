@@ -152,11 +152,9 @@ class SqlDatabase():
         else:
             raise FileExistsError("No databse file found in working directory")
 
-
     def display(self, *, size=1):
         """Stupid display function. NEEDS IMPROVEMENT"""
         self.curs.execute('SELECT * from {}'.format(self.table_name))
-        # names = [description[0] for description in self.curs.description]
         return self.curs.fetchmany(size=size)
         #Displays database name, table and names, contents of created tables (header/fetchone) and
         # other databse/table attributes
