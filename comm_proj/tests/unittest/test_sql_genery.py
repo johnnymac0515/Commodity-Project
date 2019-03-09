@@ -4,12 +4,11 @@ import os
 import unittest
 import pandas as pd
 
-from comm_proj.package1.sql_gener import map_dftype_to_sqldtype
+from comm_proj.package1.sql_gener  import map_dftype_to_sqldtype
 from comm_proj.package1.sql_gener import table_create_str
 from comm_proj.package1.sql_gener import sql_insert_str
 from comm_proj.package1.sql_gener import dataframe_to_tup_list
 from comm_proj.package1.sql_gener import sql_select_str
-
 
 cwd = os.getcwd()
 path = cwd+'/comm_proj/tests/test_data/sql_gener_testdata.csv'

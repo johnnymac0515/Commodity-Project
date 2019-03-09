@@ -11,6 +11,7 @@ with open('requirements.txt') as f:
     requires = list(f.read().splitlines())
 
 setup(name='commodity_tool',
+      app=['comm_proj/package1/commodity_tool.py'],
       version='1.0ev',
       long_description=readme,
       classifiers=['Development Status :: 4 - Beta',
@@ -20,14 +21,14 @@ setup(name='commodity_tool',
                    'Natural Language :: English',
                    'Programming Language :: Python :: 3.7',
                    'Topic :: Scientific/Engineering :: Information Analysis'],
-       url='https://github.com/johnnymac0515/Commodity-Project',
-       author='John Macnamara',
-       author_email= 'john.macnamara.dev@gmail.com',
-       license=license,
-       packages=find_packages(),
-       package_data={'': ['LICENSE']},
-       install_requires=requires,
-       include_package_data=True
+      url='https://github.com/johnnymac0515/Commodity-Project',
+      author='John Macnamara',
+      author_email='john.macnamara.dev@gmail.com',
+      license=license,
+      packages=find_packages(),
+      package_data={'': ['LICENSE']},
+      install_requires=requires,
+      include_package_data=True
     #    entry_points= {
     #        'console_scripts': ['commodity_tool=commodity_project_ir.command_line:main'] TODO add entry point
     #                 }

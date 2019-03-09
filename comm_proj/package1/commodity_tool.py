@@ -1,11 +1,15 @@
+#!/usr/bin/env python3
 """This module runs as a pseudo main function and data set into a dataframe. It requests the data
    path stored locally by the user"""
 
-import sys
 import pandas as pd 
-import comm_proj.package1.sql_gener as sql_gener
-import comm_proj.package1.load_and_clean as load_and_clean
-import comm_proj.package1.plotter as plotter
+import sys
+import os
+# sys.path.append("/Users/johnmacnamara/Commodity_Project")
+sys.path.append(os.path.abspath('.'))
+import sql_gener
+import load_and_clean
+import plotter
 
 def build_database(dataframe, name):
     """Builds SQLite3 database for querying commodity data and returns database object"""
@@ -28,7 +32,8 @@ def select_data(df):
     
         print("Select a location (Country/Region) from the below list\n")
         location_list = list(df["Location"].unique())
-        [print(loc) for loc in location_list]
+        for loc in location_list:
+            print(loc)
         location = input("\nLocation: ")
 
         if location in location_list:
@@ -45,7 +50,8 @@ def select_data(df):
 
         print("Select a Commodity from the below list found in {}\n".format(location))
         commodity_list = list(df[df['Location']==location]["Commodity"].unique())
-        [print(com) for com in commodity_list]
+        for com in commodity_list:
+            print(com)
         commodity = input("\nCommodity: ")
 
         if commodity in commodity_list:
